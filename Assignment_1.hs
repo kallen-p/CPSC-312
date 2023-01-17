@@ -1,14 +1,15 @@
 
 
 --1.a
-{-harmonic :: (Eq t, Fractional t) => t -> t
-harmonic takes n and returns 1+ 1/2 + .. + 1/n -}
---harmonic :: (Eq t, Fractional t) => t -> t
+{-harmonic takes n and returns 1+ 1/2 + .. + 1/n -}
+harmonic :: (Integral t, Fractional a) => t -> a
 harmonic 1 = 1
-harmonic n = (1/n) + harmonic (n-1)
+harmonic n = (1/(fromIntegral(n))) + harmonic (n-1)
 
 --1.b 
-{-didn't work with length[1,2,3,4] because the function assumes that the type that is given will be the type that is returned. -}
+{- The function didn't work with length[1,2,3,4] because the function assumes that the imput type will be of the form Integral and the length function returns an Int type. 
+We fixed this by adding fromIntegral front of the variable to convert n into an Num type which didn't cause a type error. 
+The reason that Haskell works like this is becuase it is trying to infer the type of the function and so when it recieves an imput of another type it throws an error.   -}
 
 
 --2
