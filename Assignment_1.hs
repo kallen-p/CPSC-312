@@ -42,8 +42,9 @@ myreplace x y (h:t)
  | otherwise = (h) : myreplace x y t
 
 --4.b
---myapply :: [a] -> [(a,a1)] -> [a1]
+myapply :: Eq a => [a] -> [(a,a)] -> [a]
 myapply [] (h2:t2) = []
+myapply (h:t) [] = [h]
 myapply (h:t) (h2:t2)
  | h == fst(h2) = snd(h2) : myapply t (h2:t2)
  | otherwise = myapply [h] t2 ++ myapply t (h2:t2)
