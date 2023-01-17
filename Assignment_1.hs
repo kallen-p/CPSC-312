@@ -1,8 +1,15 @@
-
+--Kallen Paterson (87052684)
+--Alex Baillie (30018774)
 
 --1.a
-{-harmonic takes n and returns 1+ 1/2 + .. + 1/n -}
+{-harmonic takes n and returns 1+ 1/2 + .. + 1/n 
+Tests: 
+harmonic 0 = 0
+harmonic 2 = 1.5
+harmonic 10 = 2.9289 -}
+
 harmonic :: (Integral t, Fractional a) => t -> a
+harmonic 0 = 0
 harmonic 1 = 1
 harmonic n = (1/(fromIntegral(n))) + harmonic (n-1)
 
@@ -35,6 +42,12 @@ f. (Num a) => a -> a -> a
 g. (Fractional a) => a -> a -}
 
 --4.a
+{- myreplace takes two elements x, y from the Eq class and a list of the same type and replaces all occurences of x with y in the list
+Tests: 
+myreplace 7 3 [7,0,7,1,7,2,7,3] => [3,0,3,1,3,2,3,3]
+myreplace ’a’ ’x’ "" => ""
+myreplace ’a’ ’x’ "xabacadx" => "xxbxcxdx"-}
+
 myreplace :: (Eq a) => a -> a -> [a] -> [a]
 myreplace x y [] = []
 myreplace x y (h:t)
@@ -42,6 +55,11 @@ myreplace x y (h:t)
  | otherwise = (h) : myreplace x y t
 
 --4.b
+{- myapply takes two lists, the 2nd being a list of (x , y) tuples, and replaces each occurrence of x by y in the first list 
+Tests:
+myapply "abcdec" [(’a’,’f’), (’c’,’3’), (’g’,’7’)] => "fb3de3"
+myapply "baab" [(’a’,’b’), (’b’,’a’)] => "abba"-}
+
 myapply :: Eq a => [a] -> [(a,a)] -> [a]
 myapply [] (h2:t2) = []
 myapply (h:t) [] = [h]
@@ -50,9 +68,21 @@ myapply (h:t) (h2:t2)
  | otherwise = myapply [h] t2 ++ myapply t (h2:t2)
 
 --4.c
+{-myordered takes in a list and returns True if the list goes from least to greatest and False otherwise. 
+Tests:
+myordered [] => True
+myordered [2] => True
+myordered [1,2] => True
+myordered [1,1] => True -} 
+
 myordered :: (Ord a) => [a] -> Bool
 myordered [] = True
 myordered [x] = True
 myordered (h:t) = ((h <= (head(t)))&&(myordered t))
 
 --4.d
+myremoveduplicates [] = []
+myremoveduplicates [x] = [x]
+myremoveduplicates (h:t)
+ | h == (head(t)) = myremoveduplicates [h]++(tail(t))
+ | otherwise = [h]++ myremoveduplicates t
