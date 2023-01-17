@@ -48,3 +48,11 @@ myapply (h:t) [] = [h]
 myapply (h:t) (h2:t2)
  | h == fst(h2) = snd(h2) : myapply t (h2:t2)
  | otherwise = myapply [h] t2 ++ myapply t (h2:t2)
+
+--4.c
+myordered :: (Ord a) => [a] -> Bool
+myordered [] = True
+myordered [x] = True
+myordered (h:t) = ((h <= (head(t)))&&(myordered t))
+
+--4.d
