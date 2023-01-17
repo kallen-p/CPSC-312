@@ -41,8 +41,8 @@ myreplace x y (h:t)
  | otherwise = (h) : myreplace x y t
 
 --4.b
-myapply :: [a] -> [(a,a1)] -> [a1]
---myapply [] (a:z) = []
-myapply (h:t) (a:z)
- | h == fst(a) = snd(a) : myapply t (a:z)
- | otherwise = myapply [h] z : myapply t (a:z)
+--myapply :: [a] -> [(a,a1)] -> [a1]
+myapply [] (h2:t2) = []
+myapply (h:t) (h2:t2)
+ | h == fst(h2) = snd(h2) : myapply t (h2:t2)
+ | otherwise = myapply [h] t2 ++ myapply t (h2:t2)
