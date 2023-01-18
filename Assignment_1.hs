@@ -86,3 +86,13 @@ myremoveduplicates [x] = [x]
 myremoveduplicates (h:t)
  | h == (head(t)) = myremoveduplicates [h]++(tail(t))
  | otherwise = [h]++ myremoveduplicates t
+
+{- 5.
+1. This question took about and hour and a half to complete and it taught us how to deal with basic type errors and the tools Haskell has to convert Num types. 
+The question was reasonable but the extended time came from understanding the type error in 1.b and figuring out how to correct it with rudementary knowledge in Haskell.
+2. 
+3. This question took about a half an hour to complete and it cemented how to deduce the types of a funciton through analysis. 
+The question was very reasonable and definitely the easiest question on the homework.
+4. This question took about two hours to complete. It taught us how to approach different problems in Haskell and helped us create a strategy to approach
+problems in Haskell. The question was very reasonable with each part taking about 20 minutes to complete. 
+-}
