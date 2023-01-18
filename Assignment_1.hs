@@ -1,3 +1,4 @@
+
 --Kallen Paterson (87052684)
 --Alex Baillie (30018774)
 
@@ -25,7 +26,6 @@ The reason that Haskell works like this is becuase it is trying to infer the typ
 -- s is number of games left 
 -- w is number of games won
 -- t is total games in series 
-
 -- probability 0.6 2 0 2 = 0.52
 -- probability 0.6 4 2 7 = 0.7
 -- probability 0.9 1 0 1 = 0.9
@@ -93,12 +93,12 @@ myordered [x] = True
 myordered (h:t) = ((h <= (head(t)))&&(myordered t))
 
 --4.d
+myremoveduplicates :: Eq a => [a] -> [a]
 myremoveduplicates [] = []
-myremoveduplicates [x] = [x]
-myremoveduplicates (h:t)
- | h == (head(t)) = myremoveduplicates [h]++(tail(t))
- | otherwise = [h]++ myremoveduplicates t
-
+myremoveduplicates (x:xs)   
+  | x `elem` xs = myremoveduplicates xs
+  | otherwise = x : myremoveduplicates xs
+  
 --4.e
 numTimesFound :: Ord a => a -> [a] -> Integer
 numTimesFound _ [] = 0
@@ -125,6 +125,7 @@ delna n e (x:xs) =
   else if e == x
     then (delna (n - 1) e xs)
   else (x : (delna n e xs))
+
 
 {- 5.
 1. This question took about and hour and a half to complete and it taught us how to deal with basic type errors and the tools Haskell has to convert Num types. 
