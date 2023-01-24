@@ -23,3 +23,30 @@ toUpper x = toEnum( fromEnum x - fromEnum 'a' + fromEnum 'A')
  
 capVowel [] = []
 capVowel (h:t) = doif (\ x -> x `elem` ['a','e','i','o','u']) toUpper (h:t)
+
+-- iv.
+doif1 f g [] = []
+doif1 f g (h:t) = [g x | x <- (h:t), f x == True]
+
+-- v.
+
+doif2 f g [] = []
+doif2 f g (h:t) 
+ | (f h == True) = foldr (\ x ->(g x)) [] h
+ | otherwise = h: doif2 f g t
+ 
+--2a.
+harmonic 1 = 1
+harmonic n = sum[ 1/(x) | x <- [1..n]]
+
+-- b.
+myremoveduplicates [] = []
+--myremoveduplicates (h:t)
+
+--c.
+myordered [] = True
+myordered (h:t) 
+ | h <= head(t) = (True) && (myordered t)
+ |otherwise  = False
+
+-- d.
