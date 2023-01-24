@@ -24,24 +24,24 @@ toUpper x = toEnum( fromEnum x - fromEnum 'a' + fromEnum 'A')
 capVowel [] = []
 capVowel (h:t) = doif (\ x -> x `elem` ['a','e','i','o','u']) toUpper (h:t)
 
--- iv. (unfinished)
+-- iv.
 doif1 f g [] = []
-doif1 f g (h:t) = [g x | x <- (h:t), f x == True]
+doif1 f g (h:t) = [if f x == True then g x else x | x <- (h:t)]
 
 -- v. (unfinished)
 
 doif2 f g [] = []
-doif2 f g (h:t) 
- | (f h == True) = foldr (\ x ->(g x)) [] h
- | otherwise = h: doif2 f g t
+doif2 f g (h:t) = []
+ 
  
 --2a.
 harmonic 1 = 1
 harmonic n = sum[ 1/(x) | x <- [1..n]]
 
 -- b. (unfinished)
+myremoveduplicates :: [a] -> [a]
 myremoveduplicates [] = []
---myremoveduplicates (h:t)
+--myremoveduplicates (h:t) = [x | x <- (h:t), not (h `elem` t)]
 
 --c.
 myordered [] = True
@@ -50,4 +50,9 @@ myordered (h:t)
  | h <= head(t) = (True) && (myordered t)
  | otherwise  = False
 
--- d.
+-- d. (unfinished)
+
+-- e. (unfinished)
+myapply :: (Eq a ) => [a] -> [(a,a)] -> [a]
+myapply [] (a:z) = []
+myapply (h:t) (a:z) = [if x == fst(a) then y else x| x <- (h:t), y <-(map snd (a:z))]
