@@ -58,3 +58,9 @@ myordered (h:t)
 myapply :: (Eq a ) => [a] -> [(a,a)] -> [a]
 myapply [] (a:z) = []
 myapply (h:t) (a:z) = [if x == fst(a) then y else x| x <- (h:t), y <-(map snd (a:z))]
+
+{-3. 
+1.This question took about an hour and a half. The majority of that time was implementing doif only using list comprehension and foldr. It was a good learning experience since I amm not used to not using recursion
+as every programming language I've used in the past heavily relies on recursion so it was hard to think outside of the norm.
+2.This question took about 2 to 3 hours to complete. Again a lot of it was figuring out how to implement the funcitons without the use of recursion. Hopefully with more practice it will become easier to code using 
+list comprehension and foldr/foldl.
