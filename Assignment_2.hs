@@ -1,3 +1,6 @@
+--Kallen Paterson (87052684)
+--Alex Baillie (30018774)
+
 -- Assignment 2
 
 
@@ -28,10 +31,10 @@ capVowel (h:t) = doif (\ x -> x `elem` ['a','e','i','o','u']) toUpper (h:t)
 doif1 f g [] = []
 doif1 f g (h:t) = [if f x == True then g x else x | x <- (h:t)]
 
--- v. (unfinished)
+-- v.
 
 doif2 f g [] = []
-doif2 f g (h:t) = []
+doif2 f g (h:t) = foldr (\x -> if f x then (g x:) else (x:)) [] (h:t) 
  
  
 --2a.
@@ -39,9 +42,9 @@ harmonic 1 = 1
 harmonic n = sum[ 1/(x) | x <- [1..n]]
 
 -- b. (unfinished)
-myremoveduplicates :: [a] -> [a]
+--myremoveduplicates :: [a] -> [a]
 myremoveduplicates [] = []
---myremoveduplicates (h:t) = [x | x <- (h:t), not (h `elem` t)]
+myremoveduplicates (h:t) = [if h `elem` t then y else x | x <- (h:t), y <- []]
 
 --c.
 myordered [] = True
