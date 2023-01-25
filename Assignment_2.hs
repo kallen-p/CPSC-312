@@ -41,11 +41,10 @@ doif2 f g (h:t) = foldr (\x -> if f x then (g x:) else (x:)) [] (h:t)
 harmonic 1 = 1
 harmonic n = sum[ 1/(x) | x <- [1..n]]
 
--- b. (unfinished)
---myremoveduplicates :: [a] -> [a]
+-- b.
 myremoveduplicates [] = []
-myremoveduplicates (h:t) = [if h `elem` t then y else x | x <- (h:t), y <- []]
-
+myremoveduplicates (h:t) = foldr (\ x y -> if x `elem` y then y else (x:y)) [] (h:t)
+ 
 --c.
 myordered [] = True
 myordered (h:t) 
