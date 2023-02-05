@@ -45,8 +45,9 @@ askabout (QLeaf ans) =
     if (line `elem` ["y","yes","ye","oui"])
        then return (QLeaf ans)
        else do
-          putStrLn("I'm sorry, please try again")
-          return (QLeaf ans)
+          --putStrLn("I'm sorry, please try again")
+			addnewq (QLeaf ans)
+          --return (QLeaf ans)
           
 askabout (QNode q yes no) =
   do
@@ -60,5 +61,18 @@ askabout (QNode q yes no) =
             newno <- askabout no
             return (QNode q yes newno)
      
+
+addnewq :: QATree -> IO QATree
+addnewq (QLeaf ans) = 
+  do
+    putStrLn "What are you thinking of?" 
+    obj <- getLine 
+    if (obj == "")
+	    then return (QLeaf ans)
+        else do
+	         putStrLn ("Give a question for which the answer is yes for "++obj++" and no for "++ans) 
+	         quest <- getLine 
+	         return (QNode quest (QLeaf ans) (QLeaf obj))
+	
 go :: IO QATree
 go = play initQATree
