@@ -76,3 +76,15 @@ addnewq (QLeaf ans) =
 	
 go :: IO QATree
 go = play initQATree
+
+--1.b
+fixdel :: String -> String
+
+fixdel (w:x:y:z:t)  
+ | length (w:x:y:z:t) <= 3 = (w:x:y:z:t)
+ | [w] ++ [x] ++ [y] ++ [z] == "\DEL" = fixdel t
+ | otherwise = [w] ++ fixdel (x:y:z:t)
+
+fixdel _ = []
+
+ 
