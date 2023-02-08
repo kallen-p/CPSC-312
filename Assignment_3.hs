@@ -88,9 +88,10 @@ fixdel (w:x:y:z:t)
 fixdel _ = []
 
  --3.a
-splitstep :: (a-> Bool) -> [a] -> [[a]]
-splitstep param (h:t)
- | param h = [[h]] ++ splitstep param t
- | otherwise = [[h] ++ head(splitstep param t)]++splitstep param t
+splitsep :: (a-> Bool) -> [a] -> [[a]]
+splitsep param (h:t)
+ | param h = splitsep param t
+ | otherwise = let(y,z) = break param t
+               in (h:y) : splitsep param z
  
-splitstep param _ = []
+splitsep _ [] = []
