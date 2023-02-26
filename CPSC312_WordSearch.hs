@@ -49,3 +49,57 @@ pickfive n
 buildRows :: [String] -> WordSearch
 
 buildRows _ = Rows [] 
+
+-- BUILD FUNCTIONS AFTER THIS 
+-- Function to generate a random letter
+randomLetter :: IO Char
+randomLetter = randomRIO ('a', 'z')
+
+-- Function to fill the word search grid with random letters
+fillGrid :: Int -> Int -> [[Char]] -> IO [[Char]]
+fillGrid rows cols grid =
+  if rows == 0
+  then return grid
+  else do
+    newRow <- sequence [randomLetter | i <- [1..cols]]
+    fillGrid (rows-1) cols (newRow : grid)
+
+-- Function to place a word in the word search grid
+placeWord :: String -> [[Char]] -> IO [[Char]]
+placeWord word grid = do
+  let rows = length grid
+  let cols = length (head grid)
+  let wordLen = length word
+  let orientations = [(0, 1), (1, 0), (1, 1), (-1, 1)]
+  let validPositions = [(i, j, o) | i <- [0..rows-1], j <- [0..cols-1], o <- orientations,
+                        let endRow = i + (wordLen - 1) * fst o,
+                        let endCol = j + (wordLen - 1) * snd o,
+                        endRow >= 0 && endRow < rows && endCol >= 0 && endCol < cols]
+  if null validPositions
+  then return grid
+  else do
+    let (i, j, o) = head validPositions
+    let newGrid = [[if i' == row && j' == col
+                    then if (i' - i) `mod` (fst o) == 0 && (j' - j) `mod` (snd o) == 0
+                         then word !! ((i' - i) `div` (fst o) + (j' - j) `div` (snd o))
+                         else grid !! row !! col
+                    else grid !! row !! col
+                  | col <- [0..cols-1]]
+                 | row <- [0..rows-1]]
+    return newGrid
+
+-- Function to generate the word search game
+generateWordSearch :: [String] -> IO ()
+generateWordSearch words = do
+  let gridSize = 15
+  grid <- fillGrid gridSize gridSize [[] | i <- [1..gridSize]]
+  filledGrid <- foldrM placeWord grid words
+  mapM_ putStrLn filledGrid
+
+-- Main function to get input and generate the word search
+main :: IO ()
+main = do
+  putStrLn "Enter a list of words to include in the word search, separated by commas:"
+  input <- getLine
+  let words = words (map (\c -> if c == ',' then ' ' else c) input)
+  generateWordSearch words

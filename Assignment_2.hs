@@ -56,11 +56,12 @@ myordered (h:t)
 myreplace a b xs = [if x == a then b else x | x<-xs]
 
 -- e. (unfinished)
+{- myapply [] (a:z) = []
+myapply (h:t) (a:z) = 
 
 
 
 
-{-
 myapply :: (Eq a ) => [a] -> [(a,a)] -> [a]
 myapply [] (a:z) = []
 myapply (h:t) (a:z) = [if x == fst(a) then y else x| x <- (h:t), y <-(map snd (a:z))]
