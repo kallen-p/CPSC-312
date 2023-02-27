@@ -3,16 +3,19 @@
 import System.Random
 import Data.Foldable
 
-data WordSearch = Row [Char]
+type WsChar = (Char, Bool)
+
+data WordSearch = Row [WsChar]
   | Rows [WordSearch]
-{-  
-generateSearch :: [String] -> IO WordSearch
+ 
+
+generateSearch :: [String] -> IO ()
   
 --Takes a set of words and returns a word search with a minimum of 25 characters in the list of searchable words
 generateSearch [] = generateSearch (randomwords 25)
 generateSearch ourwords
  | (sum( map length ourwords)) < 25 = generateSearch (ourwords++(randomwords (25 - (sum( map length ourwords)))))
- | otherwise = do putStr (buildRows ourwords)
+ | otherwise = mapM_ putStrLn (buildRows ourwords)
 
 
 --Takes in a number of characters that are needed as extra and returns a list of words whose length sum to that integer
@@ -48,10 +51,74 @@ pickfive n
  | otherwise = take n ["apple", "beach", "chess", "daisy", "event"]
  
 --Takes a set of words and returns a set of rows
-buildRows :: [String] -> WordSearch
+buildRows :: [String] -> IO WordSearch
 
-buildRows _ = Rows [] -}
+buildRows ourwords = do
+  let numrows = 15
+  randWS <- fillWS numrows numrows []
+  filledWS <- placeWords randWS ourwords randWS ourwords
+  return filledWS
 
+--Generates a random letter from a to z
+randomLetter :: IO Char
+randomLetter = randomRIO ('a', 'z')
+
+--Fills a nxn sized wordsearch with random letters 
+fillWS :: Int -> Int -> WordSearch
+
+fillWS numrows numcols ws =
+ if numrows == 0 
+  then return ws
+  else do
+   let newRow = [(randomLetter, True) | i <- [1..numcols]]
+   fillWS (numrows - 1) numcols (newRow : ws)
+
+
+placeWords :: [String] -> WordSearch -> [String] -> WordSearch -> IO WordSearch
+
+placeWords [] ws ogwords ogws= return ws
+placeWords ourwords ws ogwords ogws = 
+ do 
+  let temp = checkPosValid length(head(ourwords)) (randInt,randInt) ws
+  let isvalid = fst temp
+  let pos = snd temp
+  let ori = last temp
+     if isvalid
+	  then placeWords tail(ourwords) (placeChar head(ourwords) ws pos ori) ogwords ogws
+      else placeWords ogwords ogws ogwords ogws
+
+--Checks if a word can be placed in a radnom orientation given a position, wordlength and a wordsearch.
+checkPosValid :: Int -> (Int,Int) -> WordSearch -> (Bool, (Int, Int), (Int, Int))
+
+checkPosValid wordlength pos ws =
+  let ori = randomOrientation -- Define or provide a value for `randomOrientation`
+      rowpos = fst pos
+      colpos = snd pos
+  in if snd (ws !! rowpos !! colpos)
+       then do
+         let positions = [(i * fst ori + rowpos, i * snd ori + colpos) | i <- [1..wordlength]]
+         valid <- sequenceA [checkSafeRow ws x y | (x, y) <- positions]
+         if isJust valid
+           then if all (snd(ws!!x!!y))
+           else return (False, pos, ori)
+       else return (False, pos, ori)
+
+--Checks if the word will fit vertically and horizontally in the wordsearch
+checkSafeRow :: WordSearch -> Int -> Int -> Maybe Bool
+checkSafeRow ws x y = case ws of
+  [] -> Nothing
+  (row:rows) ->
+    if x == 0
+      then checkSafeCol row y
+      else checkSafeRow rows (x - 1) y >>= checkSafeCol row y
+	  
+--Checks if the word will fit horizontally in a row of the wordsearch
+checkSafeCol :: WordSearch -> Int -> Maybe Bool
+checkSafeCol row i = if i >= 0 && i < length row
+                    then Just True
+                    else Nothing
+
+{-
 -- BUILD FUNCTIONS AFTER THIS 
 -- Function to generate a random letter
 randomLetter :: IO Char
@@ -107,4 +174,4 @@ main = do
   putStrLn "Enter a list of words to include in the word search, separated by commas:"
   input <- getLine
   let ourwords = words (map (\c -> if c == ',' then ' ' else c) input)
-  generateWordSearch ourwords
+  generateWordSearch ourwords -}
