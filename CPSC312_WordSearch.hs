@@ -79,11 +79,12 @@ placeWords :: [String] -> WordSearch -> [String] -> WordSearch -> IO WordSearch
 placeWords [] ws ogwords ogws= return ws
 placeWords ourwords ws ogwords ogws = 
  do 
-  let temp = checkPosValid length(head(ourwords)) (randInt,randInt) ws
+  let temp = checkPosValid length(head ourwords) (randInt,randInt) ws
   let isvalid = fst temp
   let pos = snd temp
   let ori = last temp
      if isvalid
+
 	  then placeWords tail(ourwords) (placeChars head(ourwords) ws pos ori) ogwords ogws
       else placeWords ogwords ogws ogwords ogws
 
