@@ -3,7 +3,7 @@
 import System.Random
 import Data.Foldable
 
-type WsChar = (IO Char, Bool)
+type WsChar = (Char, Bool)
 
 data WordSearch = Row [WsChar]
   | Rows [WordSearch]
@@ -83,13 +83,12 @@ placeWords ourwords ws ogwords ogws =
   let isvalid = fst temp
   let pos = snd temp
   let ori = last temp
-     if (isvalid)
+     if isvalid
 	  then placeWords tail(ourwords) (placeChar head(ourwords) ws pos ori) ogwords ogws
       else placeWords ogwords ogws ogwords ogws
 
 --Checks if a word can be placed in a radnom orientation given a position, wordlength and a wordsearch.
--- Try to implement a check if the charater is the same as the cahracter there. 
-checkPosValid :: String -> (Int,Int) -> WordSearch -> (Bool, (Int, Int), (Int, Int))
+checkPosValid :: Int -> (Int,Int) -> WordSearch -> (Bool, (Int, Int), IO (Int, Int))
 
 checkPosValid wordlength pos ws =
   let ori = randomOrientation
@@ -97,10 +96,10 @@ checkPosValid wordlength pos ws =
       colpos = snd pos
   in if snd (ws !! rowpos !! colpos)
        then do
-         let positions = [(i * fst ori + rowpos, i * snd ori + colpos) | i <- [1..length(ourword)]]
+         let positions = [(i * fst ori + rowpos, i * snd ori + colpos) | i <- [1..wordlength]]
          valid <- sequenceA [checkSafeRow ws x y | (x, y) <- positions]
          if isJust valid
-           then if all [snd(ws!!x!!y) | (x,y) <-positions] {-|| position in word is the same cahracter as fst(ws!!x!!y) Not correct notation -}
+           then if all (snd(ws!!x!!y))
            else return (False, pos, ori)
        else return (False, pos, ori)
 
@@ -109,23 +108,23 @@ checkSafeRow :: WordSearch -> Int -> Int -> Maybe Bool
 checkSafeRow ws x y = case ws of
   [] -> Nothing
   (row:rows) ->
-    if rowpos == 0
-      then checkSafeCol row colpos
-      else checkSafeRow rows (rowpos - 1) colpos >>= checkSafeCol row colpos
+    if x == 0
+      then checkSafeCol row y
+      else checkSafeRow rows (x - 1) y >>= checkSafeCol row y
 	  
 --Checks if the word will fit horizontally in a row of the wordsearch
 checkSafeCol :: WordSearch -> Int -> Maybe Bool
-checkSafeCol row colpos = if colpos >= 0 && colpos < length row
+checkSafeCol row i = if i >= 0 && i < length row
                     then Just True
                     else Nothing
-					
-					
-					
---Takes a string WordSearch Position and an orientation and replaces the letters in the WordSearch at that position with the letters of the string going the specified orientation
-placeChar :: String -> WordSearch -> (Int, Int) -> (Int, Int) -> WordSearch
 
-placeChar "" ws _ _ = ws
-placeChar ourword ws pos ori = 
+--Randomly choses an orientation
+randomOrientation :: IO (Int, Int)
+randomOrientation = do
+  x <- randomRIO (-1, 1)
+  y <- randomRIO (-1, 1)
+  let ori = (floor x, floor y)
+  return ori
 
 {-
 -- BUILD FUNCTIONS AFTER THIS 
