@@ -85,7 +85,7 @@ placeWords ourwords ws ogwords ogws =
   let ori = last temp
      if isvalid
 
-	  then placeWords tail(ourwords) (placeChars head(ourwords) ws pos ori) ogwords ogws
+	  then placeWords (tail ourwords) (placeChars (head ourwords) ws pos ori) ogwords ogws
       else placeWords ogwords ogws ogwords ogws
 
 --Checks if a word can be placed in a radnom orientation given a position, wordlength and a wordsearch.
