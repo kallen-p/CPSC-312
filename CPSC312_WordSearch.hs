@@ -166,7 +166,9 @@ pickfive n
  | otherwise = take n ["apple", "beach", "chess", "daisy", "event"]
 
 
+
 wsGen = mkStdGen 42
+
 {-
 -- Main function to get input and generate the word search
 main :: IO ()
